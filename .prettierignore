@@ -1,0 +1,9 @@
+# Output directories
+dist/
+dist-zip/
+
+# Automated release files (avoids conflicts with Release Please)
+CHANGELOG.md
+src/manifest.json
+package-lock.json
+package.json
