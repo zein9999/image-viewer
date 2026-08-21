@@ -1,0 +1,24 @@
+# Dependency directories
+node_modules/
+
+# Production build output
+dist/
+dist-zip/
+
+# Testing caches & logs
+*.log
+.eslintcache
+.vitest
+
+# IDE / Editor configurations
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS metadata
+.DS_Store
+Thumbs.db
