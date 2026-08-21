@@ -6,7 +6,6 @@ export class ImageViewer {
   private container: HTMLDivElement | null = null;
   private shadowRoot: ShadowRoot | null = null;
   private imageElement: HTMLImageElement | null = null;
-  private originalBodyOverflow: string = '';
 
   // Interactivity state
   private scale: number = 1.0;
@@ -25,10 +24,6 @@ export class ImageViewer {
     if (document.getElementById('image-viewer-root')) {
       return;
     }
-
-    // Lock body scroll
-    this.originalBodyOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
 
     // Create wrapper div in the main DOM
     this.container = document.createElement('div');
@@ -124,9 +119,6 @@ export class ImageViewer {
       window.removeEventListener('keydown', this.handleGlobalKeyDown, true);
       window.removeEventListener('mousemove', this.handleMouseMove);
       window.removeEventListener('mouseup', this.handleMouseUp);
-
-      // Restore body scroll
-      document.body.style.overflow = this.originalBodyOverflow;
 
       // Remove element
       this.container.remove();
@@ -230,6 +222,24 @@ export class ImageViewer {
       e.preventDefault();
       e.stopPropagation();
       this.hide();
+      return;
+    }
+
+    // Block keyboard scrolling while the viewer is active
+    const keysToBlock = [
+      ' ',
+      'ArrowUp',
+      'ArrowDown',
+      'ArrowLeft',
+      'ArrowRight',
+      'PageUp',
+      'PageDown',
+      'Home',
+      'End',
+    ];
+    if (keysToBlock.includes(e.key)) {
+      e.preventDefault();
+      e.stopPropagation();
     }
   };
 
