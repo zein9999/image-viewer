@@ -29,12 +29,14 @@ jobs:
       - name: Package Extension (Zip)
         run: |
           mkdir -p dist-zip
-          zip -r dist-zip/image-viewer-${{ github.ref_name }}.zip dist/ manifest.json LICENSE README.md
+          cd dist
+          zip -r ../dist-zip/${{ github.ref_name }}.zip .
+          cd ..
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist-zip/image-viewer-${{ github.ref_name }}.zip
+          files: dist-zip/${{ github.ref_name }}.zip
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
