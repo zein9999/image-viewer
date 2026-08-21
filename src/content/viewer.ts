@@ -113,8 +113,8 @@ export class ImageViewer {
     overlay.addEventListener('mouseleave', this.handleMouseUp);
     overlay.addEventListener('click', this.handleBackdropClick);
 
-    // Global keyboard listener for Esc key
-    window.addEventListener('keydown', this.handleGlobalKeyDown);
+    // Global keyboard listener for Esc key (using capture phase to intercept before page scripts)
+    window.addEventListener('keydown', this.handleGlobalKeyDown, true);
 
     // Apply initial transforms
     this.updateImageTransform();
@@ -123,7 +123,7 @@ export class ImageViewer {
   public hide(): void {
     if (this.container) {
       // Clean up event listeners
-      window.removeEventListener('keydown', this.handleGlobalKeyDown);
+      window.removeEventListener('keydown', this.handleGlobalKeyDown, true);
       
       // Restore body scroll
       document.body.style.overflow = this.originalBodyOverflow;
@@ -201,6 +201,8 @@ export class ImageViewer {
 
   private handleGlobalKeyDown = (e: KeyboardEvent): void => {
     if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
       this.hide();
     }
   };
