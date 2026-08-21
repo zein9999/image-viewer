@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2026-08-21
 
 ### Added
+
 - Context menu option "Open with Image Viewer" registered for image elements.
 - Isolated Closed Shadow DOM overlay container preventing host page CSS bleed.
 - Drag-to-pan image movement mechanics.

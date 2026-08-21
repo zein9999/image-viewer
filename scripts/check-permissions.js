@@ -15,7 +15,7 @@ try {
   console.info('Checking manifest permissions...');
   console.info(`Found permissions: ${JSON.stringify(permissions)}`);
 
-  const forbiddenPermissions = permissions.filter(perm => !ALLOWED_PERMISSIONS.includes(perm));
+  const forbiddenPermissions = permissions.filter((perm) => !ALLOWED_PERMISSIONS.includes(perm));
 
   if (forbiddenPermissions.length > 0) {
     console.error('CRITICAL SECURITY ERROR: Unapproved permissions found in manifest.json!');
