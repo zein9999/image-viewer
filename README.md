@@ -19,18 +19,22 @@ A lightweight, local-first, highly secure Chrome and Brave extension to inspect 
 - npm
 
 ### 1. Build the Extension
+
 In your project directory, install dependencies and compile the assets:
+
 ```bash
 npm install
 npm run build
 ```
 
 Alternatively, to start Vite's watch mode for active development:
+
 ```bash
 npm run dev
 ```
 
 ### 2. Load into Chrome / Brave
+
 1. Open your browser and navigate to `chrome://extensions/` or `brave://extensions/`.
 2. Enable **Developer mode** using the toggle switch in the top-right corner.
 3. Click **Load unpacked** in the top-left corner.
@@ -41,13 +45,17 @@ npm run dev
 ## Testing & Quality Control
 
 ### Unit Tests
+
 Core math calculations (zoom, pan, coordinates, limits) are tested with **Vitest**:
+
 ```bash
 npm run test:run
 ```
 
 ### Linting & Formatting
+
 Verify code quality and style guides:
+
 ```bash
 npm run lint
 npm run format
@@ -59,6 +67,6 @@ npm run format
 
 Details regarding codebase designs, security practices, and Gitflow workflows can be found in the `docs/` directory:
 
-* [Architecture Overview](docs/architecture.md)
-* [Development Guide](docs/development.md)
-* [Security and Permissions Analysis](docs/security.md)
+- [Architecture Overview](docs/architecture.md)
+- [Development Guide](docs/development.md)
+- [Security and Permissions Analysis](docs/security.md)

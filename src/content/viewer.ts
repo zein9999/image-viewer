@@ -32,7 +32,7 @@ export class ImageViewer {
     // Create wrapper div in the main DOM
     this.container = document.createElement('div');
     this.container.id = 'image-viewer-root';
-    
+
     // Attach closed Shadow DOM to completely isolate CSS
     this.shadowRoot = this.container.attachShadow({ mode: 'closed' });
 
@@ -62,7 +62,7 @@ export class ImageViewer {
     this.imageElement.className = 'viewer-image';
     this.imageElement.src = this.imageUrl;
     this.imageElement.alt = 'Image Viewer';
-    
+
     imageContainer.appendChild(this.imageElement);
     overlay.appendChild(imageContainer);
 
@@ -124,10 +124,10 @@ export class ImageViewer {
     if (this.container) {
       // Clean up event listeners
       window.removeEventListener('keydown', this.handleGlobalKeyDown, true);
-      
+
       // Restore body scroll
       document.body.style.overflow = this.originalBodyOverflow;
-      
+
       // Remove element
       this.container.remove();
       this.container = null;
@@ -152,13 +152,13 @@ export class ImageViewer {
     } else {
       this.scale = calculateZoomOut(this.scale);
     }
-    
+
     this.updateImageTransform();
   };
 
   private handleMouseDown = (e: MouseEvent): void => {
     e.stopPropagation();
-    
+
     // Only drag on left click
     if (e.button !== 0) return;
 
@@ -174,7 +174,7 @@ export class ImageViewer {
 
   private handleMouseMove = (e: MouseEvent): void => {
     if (!this.isDragging) return;
-    
+
     e.stopPropagation();
 
     const deltaX = e.clientX - this.startMouseX;

@@ -6,7 +6,7 @@ describe('Pan Core Mathematics', () => {
     const start = { x: 10, y: -20 };
     const delta = { x: 50, y: 150 };
     const result = calculatePan(start.x, start.y, delta.x, delta.y);
-    
+
     expect(result.x).toBe(60);
     expect(result.y).toBe(130);
   });

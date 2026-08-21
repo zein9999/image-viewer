@@ -3,7 +3,12 @@ export interface PanState {
   y: number;
 }
 
-export function calculatePan(startX: number, startY: number, deltaX: number, deltaY: number): PanState {
+export function calculatePan(
+  startX: number,
+  startY: number,
+  deltaX: number,
+  deltaY: number
+): PanState {
   return {
     x: startX + deltaX,
     y: startY + deltaY,

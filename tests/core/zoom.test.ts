@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { calculateZoomIn, calculateZoomOut, resetZoom, MIN_SCALE, MAX_SCALE } from '../../src/core/zoom';
+import {
+  calculateZoomIn,
+  calculateZoomOut,
+  resetZoom,
+  MIN_SCALE,
+  MAX_SCALE,
+} from '../../src/core/zoom';
 
 describe('Zoom Core Mathematics', () => {
   it('should zoom in by factor', () => {
