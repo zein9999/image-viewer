@@ -1,5 +1,5 @@
 import viewerStyles from './viewer.css?inline';
-import { calculateZoomIn, calculateZoomOut, resetZoom } from '../core/zoom';
+import { calculateZoomIn, calculateZoomOut, resetZoom, calculateZoomTargetPan } from '../core/zoom';
 import { calculatePan, resetPan, PanState } from '../core/pan';
 
 export class ImageViewer {
@@ -153,11 +153,15 @@ export class ImageViewer {
     e.stopPropagation();
     e.preventDefault(); // Stop native page scrolling
 
-    if (e.deltaY < 0) {
-      this.scale = calculateZoomIn(this.scale);
-    } else {
-      this.scale = calculateZoomOut(this.scale);
-    }
+    const mouseX = e.clientX - window.innerWidth / 2;
+    const mouseY = e.clientY - window.innerHeight / 2;
+
+    const oldScale = this.scale;
+    const newScale = e.deltaY < 0 ? calculateZoomIn(oldScale) : calculateZoomOut(oldScale);
+
+    // Recalculate translation coordinates to keep the mouse pointer focused
+    this.panState = calculateZoomTargetPan(oldScale, newScale, this.panState, mouseX, mouseY);
+    this.scale = newScale;
 
     this.updateImageTransform();
   };
