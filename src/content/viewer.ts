@@ -16,6 +16,7 @@ export class ImageViewer {
   private startMouseY: number = 0;
   private initialPanX: number = 0;
   private initialPanY: number = 0;
+  private ticking: boolean = false;
 
   constructor(private imageUrl: string) {}
 
@@ -108,9 +109,6 @@ export class ImageViewer {
     // Event listeners for zoom and pan
     overlay.addEventListener('wheel', this.handleWheel, { passive: false });
     overlay.addEventListener('mousedown', this.handleMouseDown);
-    overlay.addEventListener('mousemove', this.handleMouseMove);
-    overlay.addEventListener('mouseup', this.handleMouseUp);
-    overlay.addEventListener('mouseleave', this.handleMouseUp);
     overlay.addEventListener('click', this.handleBackdropClick);
 
     // Global keyboard listener for Esc key (using capture phase to intercept before page scripts)
@@ -124,6 +122,8 @@ export class ImageViewer {
     if (this.container) {
       // Clean up event listeners
       window.removeEventListener('keydown', this.handleGlobalKeyDown, true);
+      window.removeEventListener('mousemove', this.handleMouseMove);
+      window.removeEventListener('mouseup', this.handleMouseUp);
 
       // Restore body scroll
       document.body.style.overflow = this.originalBodyOverflow;
@@ -137,10 +137,16 @@ export class ImageViewer {
   }
 
   private updateImageTransform(): void {
-    if (this.imageElement) {
-      const { x, y } = this.panState;
-      this.imageElement.style.transform = `translate(${x}px, ${y}px) scale(${this.scale})`;
-    }
+    if (this.ticking) return;
+
+    this.ticking = true;
+    requestAnimationFrame(() => {
+      if (this.imageElement) {
+        const { x, y } = this.panState;
+        this.imageElement.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${this.scale})`;
+      }
+      this.ticking = false;
+    });
   }
 
   private handleWheel = (e: WheelEvent): void => {
@@ -170,6 +176,14 @@ export class ImageViewer {
     this.startMouseY = e.clientY;
     this.initialPanX = this.panState.x;
     this.initialPanY = this.panState.y;
+
+    if (this.imageElement) {
+      this.imageElement.classList.add('is-dragging');
+    }
+
+    // Attach drag listeners to window for fluid off-screen movement
+    window.addEventListener('mousemove', this.handleMouseMove);
+    window.addEventListener('mouseup', this.handleMouseUp);
   };
 
   private handleMouseMove = (e: MouseEvent): void => {
@@ -188,6 +202,14 @@ export class ImageViewer {
     if (this.isDragging) {
       e.stopPropagation();
       this.isDragging = false;
+
+      if (this.imageElement) {
+        this.imageElement.classList.remove('is-dragging');
+      }
+
+      // Detach listeners from window when drag completes
+      window.removeEventListener('mousemove', this.handleMouseMove);
+      window.removeEventListener('mouseup', this.handleMouseUp);
     }
   };
 
