@@ -25,6 +25,7 @@ We use **Conventional Commits** format. Commits must look like:
 ```
 
 Common types:
+
 - `feat`: A new feature
 - `fix`: A bug fix
 - `test`: Adding or correcting tests
@@ -37,6 +38,7 @@ Common types:
 ## Pull Request Policy
 
 Every Pull Request targeting `develop` or `main` runs a GitHub Actions workflow that verifies:
+
 1. Lint rules (`npm run lint`)
 2. Formatting standards (`prettier`)
 3. TypeScript compiler check (`npm run typecheck`)

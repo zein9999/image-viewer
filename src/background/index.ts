@@ -20,7 +20,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         action: 'OPEN_VIEWER',
         imageUrl,
       };
-      
+
       chrome.tabs.sendMessage(tab.id, message).catch((err) => {
         console.error('Failed to send message to content script:', err);
       });

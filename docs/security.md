@@ -6,9 +6,9 @@ Privacy and security are core principles of the Image Viewer extension. We follo
 
 We request only the absolute minimum API privileges required to run the extension:
 
-* **`contextMenus`**: Allows the background service worker to register the "Open with Image Viewer" action on right-clicked images.
-* **`activeTab`**: Grants temporary, on-demand permission to access only the active tab when the context menu is explicitly clicked.
-  - *Why not `<all_urls>` host permission?* By using `activeTab`, we avoid permanent read/write access to every webpage the user visits. This increases privacy, reduces target surface area, and removes browser security warnings upon installation.
+- **`contextMenus`**: Allows the background service worker to register the "Open with Image Viewer" action on right-clicked images.
+- **`activeTab`**: Grants temporary, on-demand permission to access only the active tab when the context menu is explicitly clicked.
+  - _Why not `<all_urls>` host permission?_ By using `activeTab`, we avoid permanent read/write access to every webpage the user visits. This increases privacy, reduces target surface area, and removes browser security warnings upon installation.
 
 ---
 
