@@ -43,7 +43,7 @@ export class ImageViewer {
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'viewer-close-btn';
-    closeBtn.innerHTML = '&#x2715;'; // ✕ symbol
+    closeBtn.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
     closeBtn.title = 'Close (Esc)';
     closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -68,7 +68,7 @@ export class ImageViewer {
 
     const zoomOutBtn = document.createElement('button');
     zoomOutBtn.className = 'viewer-btn';
-    zoomOutBtn.innerHTML = '&minus;';
+    zoomOutBtn.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
     zoomOutBtn.title = 'Zoom Out';
     zoomOutBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -77,7 +77,7 @@ export class ImageViewer {
 
     const resetBtn = document.createElement('button');
     resetBtn.className = 'viewer-btn';
-    resetBtn.innerHTML = '&#x27F3;'; // ⟲ symbol
+    resetBtn.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>`;
     resetBtn.title = 'Reset';
     resetBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -86,7 +86,7 @@ export class ImageViewer {
 
     const zoomInBtn = document.createElement('button');
     zoomInBtn.className = 'viewer-btn';
-    zoomInBtn.innerHTML = '&plus;';
+    zoomInBtn.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
     zoomInBtn.title = 'Zoom In';
     zoomInBtn.addEventListener('click', (e) => {
       e.stopPropagation();
