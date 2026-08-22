@@ -21,9 +21,21 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         imageUrl,
       };
 
-      chrome.tabs.sendMessage(tab.id, message).catch((err) => {
-        console.error('Failed to send message to content script:', err);
-      });
+      // Dynamically inject content.js on the active tab only when the user clicks the action
+      chrome.scripting
+        .executeScript({
+          target: { tabId: tab.id },
+          files: ['content.js'],
+        })
+        .then(() => {
+          // Send message once content script has loaded in the active tab
+          chrome.tabs.sendMessage(tab.id!, message).catch((err) => {
+            console.error('Failed to send message to content script:', err);
+          });
+        })
+        .catch((err) => {
+          console.error('Failed to dynamically inject content script:', err);
+        });
     }
   }
 });
