@@ -20,6 +20,7 @@ export class ImageViewer {
 
   // Interactivity state
   private scale: number = 1.0;
+  private rotation: number = 0;
   private panState: PanState = { x: 0, y: 0 };
   private isDragging: boolean = false;
   private startMouseX: number = 0;
@@ -62,15 +63,31 @@ export class ImageViewer {
     // Apply dynamic backdrop opacity setting
     overlay.style.backgroundColor = `rgba(0, 0, 0, ${this.settings.backdropOpacity / 100})`;
 
+    // Top-right Window controls (Fullscreen + Close)
+    const topControls = document.createElement('div');
+    topControls.className = 'viewer-top-controls';
+
+    this.fullscreenBtn = document.createElement('button');
+    this.fullscreenBtn.className = 'viewer-top-btn';
+    this.fullscreenBtn.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>`;
+    this.fullscreenBtn.title = 'Toggle Fullscreen (F)';
+    this.fullscreenBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleFullscreen();
+    });
+
     const closeBtn = document.createElement('button');
-    closeBtn.className = 'viewer-close-btn';
+    closeBtn.className = 'viewer-top-btn';
     closeBtn.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
     closeBtn.title = 'Close (Esc)';
     closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       this.hide();
     });
-    overlay.appendChild(closeBtn);
+
+    topControls.appendChild(this.fullscreenBtn);
+    topControls.appendChild(closeBtn);
+    overlay.appendChild(topControls);
 
     const imageContainer = document.createElement('div');
     imageContainer.className = 'viewer-image-container';
@@ -90,8 +107,18 @@ export class ImageViewer {
     overlay.appendChild(imageContainer);
 
     // Controls container
+    // Controls container
     const controls = document.createElement('div');
     controls.className = 'viewer-controls';
+
+    const rotateLeftBtn = document.createElement('button');
+    rotateLeftBtn.className = 'viewer-btn';
+    rotateLeftBtn.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>`;
+    rotateLeftBtn.title = 'Rotate 90° Counter-Clockwise (Q)';
+    rotateLeftBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.handleRotateLeft();
+    });
 
     const zoomOutBtn = document.createElement('button');
     zoomOutBtn.className = 'viewer-btn';
@@ -104,8 +131,8 @@ export class ImageViewer {
 
     const resetBtn = document.createElement('button');
     resetBtn.className = 'viewer-btn';
-    resetBtn.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>`;
-    resetBtn.title = 'Reset';
+    resetBtn.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>`;
+    resetBtn.title = 'Reset (R)';
     resetBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       this.handleReset();
@@ -120,19 +147,20 @@ export class ImageViewer {
       this.handleZoomIn();
     });
 
-    this.fullscreenBtn = document.createElement('button');
-    this.fullscreenBtn.className = 'viewer-btn';
-    this.fullscreenBtn.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>`;
-    this.fullscreenBtn.title = 'Toggle Fullscreen (F)';
-    this.fullscreenBtn.addEventListener('click', (e) => {
+    const rotateRightBtn = document.createElement('button');
+    rotateRightBtn.className = 'viewer-btn';
+    rotateRightBtn.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><polyline points="21 3 21 8 16 8"></polyline></svg>`;
+    rotateRightBtn.title = 'Rotate 90° Clockwise (E)';
+    rotateRightBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      this.toggleFullscreen();
+      this.handleRotateRight();
     });
 
+    controls.appendChild(rotateLeftBtn);
     controls.appendChild(zoomOutBtn);
     controls.appendChild(resetBtn);
     controls.appendChild(zoomInBtn);
-    controls.appendChild(this.fullscreenBtn);
+    controls.appendChild(rotateRightBtn);
     overlay.appendChild(controls);
 
     this.shadowRoot.appendChild(overlay);
@@ -182,7 +210,7 @@ export class ImageViewer {
     requestAnimationFrame(() => {
       if (this.imageElement) {
         const { x, y } = this.panState;
-        this.imageElement.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${this.scale})`;
+        this.imageElement.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${this.scale}) rotate(${this.rotation}deg)`;
       }
       this.ticking = false;
     });
@@ -311,6 +339,22 @@ export class ImageViewer {
       return;
     }
 
+    // Keyboard Rotation Right (E)
+    if (e.key.toLowerCase() === 'e') {
+      e.preventDefault();
+      e.stopPropagation();
+      this.handleRotateRight();
+      return;
+    }
+
+    // Keyboard Rotation Left (Q)
+    if (e.key.toLowerCase() === 'q') {
+      e.preventDefault();
+      e.stopPropagation();
+      this.handleRotateLeft();
+      return;
+    }
+
     // Keyboard Panning (Arrow keys)
     const PAN_STEP = 40; // Pixels to move per keypress
     if (e.key === 'ArrowLeft') {
@@ -374,7 +418,18 @@ export class ImageViewer {
 
   private handleReset(): void {
     this.scale = resetZoom();
+    this.rotation = 0;
     this.panState = resetPan();
+    this.updateImageTransform();
+  }
+
+  private handleRotateRight(): void {
+    this.rotation += 90;
+    this.updateImageTransform();
+  }
+
+  private handleRotateLeft(): void {
+    this.rotation -= 90;
     this.updateImageTransform();
   }
 
