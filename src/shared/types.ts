@@ -11,4 +11,5 @@ export interface ViewerSettings {
   zoomSensitivity: 'slow' | 'normal' | 'fast';
   closeOnBackdropClick: boolean;
   initialFitMode: 'fit' | 'original';
+  enableDoubleClickZoom: boolean;
 }

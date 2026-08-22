@@ -9,6 +9,7 @@ const DEFAULT_SETTINGS: ViewerSettings = {
   zoomSensitivity: 'normal',
   closeOnBackdropClick: true,
   initialFitMode: 'fit',
+  enableDoubleClickZoom: false,
 };
 
 export class ImageViewer {
@@ -16,11 +17,13 @@ export class ImageViewer {
   private shadowRoot: ShadowRoot | null = null;
   private imageElement: HTMLImageElement | null = null;
   private fullscreenBtn: HTMLButtonElement | null = null;
+  private zoomText: HTMLSpanElement | null = null;
   private settings: ViewerSettings = DEFAULT_SETTINGS;
 
   // Interactivity state
   private scale: number = 1.0;
   private rotation: number = 0;
+  private isHudHidden: boolean = false;
   private panState: PanState = { x: 0, y: 0 };
   private isDragging: boolean = false;
   private startMouseX: number = 0;
@@ -63,9 +66,18 @@ export class ImageViewer {
     // Apply dynamic backdrop opacity setting
     overlay.style.backgroundColor = `rgba(0, 0, 0, ${this.settings.backdropOpacity / 100})`;
 
-    // Top-right Window controls (Fullscreen + Close)
+    // Top-right Window controls (Hide HUD + Fullscreen + Close)
     const topControls = document.createElement('div');
     topControls.className = 'viewer-top-controls';
+
+    const hideHudBtn = document.createElement('button');
+    hideHudBtn.className = 'viewer-top-btn';
+    hideHudBtn.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+    hideHudBtn.title = 'Hide HUD (H)';
+    hideHudBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleHud();
+    });
 
     this.fullscreenBtn = document.createElement('button');
     this.fullscreenBtn.className = 'viewer-top-btn';
@@ -85,6 +97,7 @@ export class ImageViewer {
       this.hide();
     });
 
+    topControls.appendChild(hideHudBtn);
     topControls.appendChild(this.fullscreenBtn);
     topControls.appendChild(closeBtn);
     overlay.appendChild(topControls);
@@ -104,6 +117,9 @@ export class ImageViewer {
     }
 
     imageContainer.appendChild(this.imageElement);
+    if (this.settings.enableDoubleClickZoom) {
+      this.imageElement.addEventListener('dblclick', this.handleDoubleClick);
+    }
     overlay.appendChild(imageContainer);
 
     // Controls container
@@ -163,6 +179,17 @@ export class ImageViewer {
     controls.appendChild(rotateRightBtn);
     overlay.appendChild(controls);
 
+    // Symmetrical Zoom Badge floating above the controls bar
+    const zoomBadge = document.createElement('div');
+    zoomBadge.className = 'viewer-zoom-badge';
+
+    this.zoomText = document.createElement('span');
+    this.zoomText.textContent = `${Math.round(this.scale * 100)}%`;
+    this.zoomText.style.userSelect = 'none';
+
+    zoomBadge.appendChild(this.zoomText);
+    overlay.appendChild(zoomBadge);
+
     this.shadowRoot.appendChild(overlay);
     document.body.appendChild(this.container);
 
@@ -170,6 +197,7 @@ export class ImageViewer {
     overlay.addEventListener('wheel', this.handleWheel, { passive: false });
     overlay.addEventListener('mousedown', this.handleMouseDown);
     overlay.addEventListener('click', this.handleBackdropClick);
+    overlay.addEventListener('click', this.handleOverlayClickCapture, true);
 
     // Global keyboard listener for Esc key (using capture phase to intercept before page scripts)
     window.addEventListener('keydown', this.handleGlobalKeyDown, true);
@@ -189,6 +217,17 @@ export class ImageViewer {
       window.removeEventListener('mouseup', this.handleMouseUp);
       document.removeEventListener('fullscreenchange', this.handleFullscreenChange);
 
+      if (this.shadowRoot) {
+        const overlay = this.shadowRoot.querySelector('.viewer-overlay') as HTMLDivElement | null;
+        if (overlay) {
+          overlay.removeEventListener('click', this.handleOverlayClickCapture, true);
+        }
+      }
+
+      if (this.imageElement && this.settings.enableDoubleClickZoom) {
+        this.imageElement.removeEventListener('dblclick', this.handleDoubleClick);
+      }
+
       // Exit fullscreen if active when closing
       if (document.fullscreenElement) {
         document.exitFullscreen().catch(() => {});
@@ -200,6 +239,7 @@ export class ImageViewer {
       this.shadowRoot = null;
       this.imageElement = null;
       this.fullscreenBtn = null;
+      this.zoomText = null;
     }
   }
 
@@ -211,6 +251,9 @@ export class ImageViewer {
       if (this.imageElement) {
         const { x, y } = this.panState;
         this.imageElement.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${this.scale}) rotate(${this.rotation}deg)`;
+      }
+      if (this.zoomText) {
+        this.zoomText.textContent = `${Math.round(this.scale * 100)}%`;
       }
       this.ticking = false;
     });
@@ -355,6 +398,14 @@ export class ImageViewer {
       return;
     }
 
+    // Keyboard Toggle HUD (H)
+    if (e.key.toLowerCase() === 'h') {
+      e.preventDefault();
+      e.stopPropagation();
+      this.toggleHud();
+      return;
+    }
+
     // Keyboard Panning (Arrow keys)
     const PAN_STEP = 40; // Pixels to move per keypress
     if (e.key === 'ArrowLeft') {
@@ -458,6 +509,42 @@ export class ImageViewer {
       // Show enter fullscreen icon (expand corners SVG)
       this.fullscreenBtn.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>`;
       this.fullscreenBtn.title = 'Toggle Fullscreen (F)';
+    }
+  };
+
+  private handleDoubleClick = (e: MouseEvent): void => {
+    e.stopPropagation();
+    if (this.scale !== 1.0) {
+      this.scale = 1.0;
+      this.panState = resetPan();
+    } else {
+      this.scale = 2.0;
+      const mouseX = e.clientX - window.innerWidth / 2;
+      const mouseY = e.clientY - window.innerHeight / 2;
+      this.panState = calculateZoomTargetPan(1.0, 2.0, this.panState, mouseX, mouseY);
+    }
+    this.updateImageTransform();
+  };
+
+  private toggleHud(): void {
+    this.isHudHidden = !this.isHudHidden;
+    if (this.shadowRoot) {
+      const overlay = this.shadowRoot.querySelector('.viewer-overlay');
+      if (overlay) {
+        if (this.isHudHidden) {
+          overlay.classList.add('hud-hidden');
+        } else {
+          overlay.classList.remove('hud-hidden');
+        }
+      }
+    }
+  }
+
+  private handleOverlayClickCapture = (e: MouseEvent): void => {
+    if (this.isHudHidden) {
+      e.stopPropagation();
+      e.preventDefault();
+      this.toggleHud();
     }
   };
 }

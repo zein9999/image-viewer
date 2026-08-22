@@ -6,6 +6,7 @@ const DEFAULT_SETTINGS: ViewerSettings = {
   zoomSensitivity: 'normal',
   closeOnBackdropClick: true,
   initialFitMode: 'fit',
+  enableDoubleClickZoom: false,
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const backdropClickInput = document.getElementById('backdrop-click') as HTMLInputElement;
   const zoomSensitivityInput = document.getElementById('zoom-sensitivity') as HTMLSelectElement;
   const fitModeInput = document.getElementById('fit-mode') as HTMLSelectElement;
+  const doubleClickZoomInput = document.getElementById('double-click-zoom') as HTMLInputElement;
 
   // Load current settings
   chrome.storage.local.get(DEFAULT_SETTINGS, (items) => {
@@ -28,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     backdropClickInput.checked = settings.closeOnBackdropClick;
     zoomSensitivityInput.value = settings.zoomSensitivity;
     fitModeInput.value = settings.initialFitMode;
+    doubleClickZoomInput.checked = settings.enableDoubleClickZoom;
   });
 
   // Helper to save settings
@@ -38,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
       zoomSensitivity: zoomSensitivityInput.value as ViewerSettings['zoomSensitivity'],
       closeOnBackdropClick: backdropClickInput.checked,
       initialFitMode: fitModeInput.value as ViewerSettings['initialFitMode'],
+      enableDoubleClickZoom: doubleClickZoomInput.checked,
     };
 
     chrome.storage.local.set(settings);
@@ -53,4 +57,5 @@ document.addEventListener('DOMContentLoaded', () => {
   backdropClickInput.addEventListener('change', saveSettings);
   zoomSensitivityInput.addEventListener('change', saveSettings);
   fitModeInput.addEventListener('change', saveSettings);
+  doubleClickZoomInput.addEventListener('change', saveSettings);
 });
