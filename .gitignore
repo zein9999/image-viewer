@@ -22,3 +22,8 @@ dist-zip/
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Planning & Agent artifacts
+task.md
+implementation_plan.md
+walkthrough.md
