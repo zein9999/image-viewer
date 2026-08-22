@@ -225,19 +225,62 @@ export class ImageViewer {
       return;
     }
 
-    // Block keyboard scrolling while the viewer is active
-    const keysToBlock = [
-      ' ',
-      'ArrowUp',
-      'ArrowDown',
-      'ArrowLeft',
-      'ArrowRight',
-      'PageUp',
-      'PageDown',
-      'Home',
-      'End',
-    ];
-    if (keysToBlock.includes(e.key)) {
+    // Keyboard Zooming (+ / -)
+    if (e.key === '+' || e.key === '=') {
+      e.preventDefault();
+      e.stopPropagation();
+      this.handleZoomIn();
+      return;
+    }
+    if (e.key === '-') {
+      e.preventDefault();
+      e.stopPropagation();
+      this.handleZoomOut();
+      return;
+    }
+
+    // Keyboard Reset (R)
+    if (e.key.toLowerCase() === 'r') {
+      e.preventDefault();
+      e.stopPropagation();
+      this.handleReset();
+      return;
+    }
+
+    // Keyboard Panning (Arrow keys)
+    const PAN_STEP = 40; // Pixels to move per keypress
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      e.stopPropagation();
+      this.panState = calculatePan(this.panState.x, this.panState.y, -PAN_STEP, 0);
+      this.updateImageTransform();
+      return;
+    }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      e.stopPropagation();
+      this.panState = calculatePan(this.panState.x, this.panState.y, PAN_STEP, 0);
+      this.updateImageTransform();
+      return;
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      e.stopPropagation();
+      this.panState = calculatePan(this.panState.x, this.panState.y, 0, -PAN_STEP);
+      this.updateImageTransform();
+      return;
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      e.stopPropagation();
+      this.panState = calculatePan(this.panState.x, this.panState.y, 0, PAN_STEP);
+      this.updateImageTransform();
+      return;
+    }
+
+    // Block other standard scrolling keys (Space, PageUp/Down, Home, End)
+    const otherKeysToBlock = [' ', 'PageUp', 'PageDown', 'Home', 'End'];
+    if (otherKeysToBlock.includes(e.key)) {
       e.preventDefault();
       e.stopPropagation();
     }
