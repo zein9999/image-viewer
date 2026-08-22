@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0](https://github.com/zein9999/image-viewer/compare/image-viewer-v0.2.0...image-viewer-v0.3.0) (2026-08-22)
+
+
+### Features
+
+* complete HUD hiding toggle mechanism and visual transition animations ([2bff329](https://github.com/zein9999/image-viewer/commit/2bff3296cfb2a2c49838a22cb32f6c1c0943bb13))
+* complete HUD hiding toggle mechanism and visual transition animations ([45c47c4](https://github.com/zein9999/image-viewer/commit/45c47c4c9661ccd09b2852d78e0624a5b3105d11))
+* complete symmetrical rotation feature and Lucide integration ([bb5fbf2](https://github.com/zein9999/image-viewer/commit/bb5fbf2776b5b6ea4204295a56cbbeba7324215c))
+* complete symmetrical rotation feature and Lucide integration ([1378a67](https://github.com/zein9999/image-viewer/commit/1378a67cd3dc3c2d3a997e41b96c1fc65dda7d86))
+* complete user settings options panel with local storage persistence ([011d2ef](https://github.com/zein9999/image-viewer/commit/011d2ef3b895f677141e8b37457a15e4db5931f2))
+* complete user settings options panel with local storage persistence ([51c3443](https://github.com/zein9999/image-viewer/commit/51c34433422f0a10385997374777567131a195bc))
+* icon ([c93a9ac](https://github.com/zein9999/image-viewer/commit/c93a9ac8a9939b6f6ecaa2000ed991b6499ee8ec))
+* implement browser native fullscreen mode with F shortcut and UI button ([ce92f46](https://github.com/zein9999/image-viewer/commit/ce92f4600f69398920220543052c0c7a3a401dde))
+* implement browser native fullscreen mode with F shortcut and UI button ([9aa607a](https://github.com/zein9999/image-viewer/commit/9aa607aafc57a374c6a402d6b6f80d8a48b69760))
+* implement keyboard shortcuts for zoom, pan and reset actions ([0ade36d](https://github.com/zein9999/image-viewer/commit/0ade36d8967beb31f1196677c1597fce93526bff))
+* implement keyboard shortcuts for zoom, pan and reset actions ([b2e6ffb](https://github.com/zein9999/image-viewer/commit/b2e6ffb961f0d0613645caf263f03b65837eaadc))
+* implement zoom based on mouse pointer position ([ff759c1](https://github.com/zein9999/image-viewer/commit/ff759c1fd61ada7781a41e2e9428215644aac958))
+* implement zoom based on mouse pointer position ([c75854b](https://github.com/zein9999/image-viewer/commit/c75854bb7f3f86aa5edbcd54107c54d02e22d384))
+
+
+### Bug Fixes
+
+* avoid duplicate script injections and resolve ESLint any type rules ([e7f9b50](https://github.com/zein9999/image-viewer/commit/e7f9b50a8d5b90f9c7244d0ba958037e44fe6bff))
+* block keyboard scrolling instead of altering body overflow to prevent page jump ([55ca27e](https://github.com/zein9999/image-viewer/commit/55ca27eae08adaf86dbcb35ab6ba4f58c848c37f))
+* block keyboard scrolling instead of altering body overflow to prevent page jump ([0ef3de2](https://github.com/zein9999/image-viewer/commit/0ef3de21792e0c75a0656645614d066de9dae9bb))
+* replace unicode icons with inline SVGs for pixel-perfect centering ([1c097d0](https://github.com/zein9999/image-viewer/commit/1c097d0ce9a9cede38d15f911b1694ca4588a85a))
+* replace unicode icons with inline SVGs for pixel-perfect centering ([ce983a0](https://github.com/zein9999/image-viewer/commit/ce983a0536b56b4d8c6a96614f433fb008ba5823))
+* update node version ([c6584ee](https://github.com/zein9999/image-viewer/commit/c6584ee79d1932fed6c0089a9c305376409816cb))
+
+
+### Performance Improvements
+
+* implement hardware acceleration, RAF throttling and dynamic drag listeners ([bc632ff](https://github.com/zein9999/image-viewer/commit/bc632ff035b884a32094d59198f679b9646931a4))
+* implement hardware acceleration, RAF throttling and dynamic drag listeners ([f5363b1](https://github.com/zein9999/image-viewer/commit/f5363b1866941b7a472b2de74d10db1c5bfe3426))
+
 ## [0.2.0](https://github.com/zein9999/image-viewer/compare/image-viewer-v0.1.0...image-viewer-v0.2.0) (2026-08-21)
 
 
