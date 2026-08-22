@@ -4,7 +4,6 @@
   "packages": {
     ".": {
       "release-type": "node",
-      "package-name": "image-viewer",
       "extra-files": ["src/manifest.json"]
     }
   }
