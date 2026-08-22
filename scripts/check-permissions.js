@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const manifestPath = resolve(__dirname, '../src/manifest.json');
-const ALLOWED_PERMISSIONS = ['contextMenus', 'activeTab', 'scripting'];
+const ALLOWED_PERMISSIONS = ['contextMenus', 'activeTab', 'scripting', 'storage'];
 
 try {
   const manifestData = JSON.parse(readFileSync(manifestPath, 'utf-8'));

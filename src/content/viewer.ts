@@ -1,11 +1,21 @@
 import viewerStyles from './viewer.css?inline';
 import { calculateZoomIn, calculateZoomOut, resetZoom, calculateZoomTargetPan } from '../core/zoom';
 import { calculatePan, resetPan, PanState } from '../core/pan';
+import { ViewerSettings } from '../shared/types';
+
+const DEFAULT_SETTINGS: ViewerSettings = {
+  backdropOpacity: 85,
+  enableShortcuts: true,
+  zoomSensitivity: 'normal',
+  closeOnBackdropClick: true,
+  initialFitMode: 'fit',
+};
 
 export class ImageViewer {
   private container: HTMLDivElement | null = null;
   private shadowRoot: ShadowRoot | null = null;
   private imageElement: HTMLImageElement | null = null;
+  private settings: ViewerSettings = DEFAULT_SETTINGS;
 
   // Interactivity state
   private scale: number = 1.0;
@@ -25,6 +35,13 @@ export class ImageViewer {
       return;
     }
 
+    chrome.storage.local.get(DEFAULT_SETTINGS, (items) => {
+      this.settings = items as ViewerSettings;
+      this.initializeViewer();
+    });
+  }
+
+  private initializeViewer(): void {
     // Create wrapper div in the main DOM
     this.container = document.createElement('div');
     this.container.id = 'image-viewer-root';
@@ -40,6 +57,9 @@ export class ImageViewer {
     // Build the markup
     const overlay = document.createElement('div');
     overlay.className = 'viewer-overlay';
+
+    // Apply dynamic backdrop opacity setting
+    overlay.style.backgroundColor = `rgba(0, 0, 0, ${this.settings.backdropOpacity / 100})`;
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'viewer-close-btn';
@@ -58,6 +78,12 @@ export class ImageViewer {
     this.imageElement.className = 'viewer-image';
     this.imageElement.src = this.imageUrl;
     this.imageElement.alt = 'Image Viewer';
+
+    // Apply dynamic layout fit mode setting
+    if (this.settings.initialFitMode === 'original') {
+      this.imageElement.style.maxWidth = 'none';
+      this.imageElement.style.maxHeight = 'none';
+    }
 
     imageContainer.appendChild(this.imageElement);
     overlay.appendChild(imageContainer);
@@ -149,7 +175,11 @@ export class ImageViewer {
     const mouseY = e.clientY - window.innerHeight / 2;
 
     const oldScale = this.scale;
-    const newScale = e.deltaY < 0 ? calculateZoomIn(oldScale) : calculateZoomOut(oldScale);
+    const factor = this.getZoomFactor();
+    const newScale =
+      e.deltaY < 0
+        ? calculateZoomIn(oldScale, undefined, undefined, factor)
+        : calculateZoomOut(oldScale, undefined, undefined, factor);
 
     // Recalculate translation coordinates to keep the mouse pointer focused
     this.panState = calculateZoomTargetPan(oldScale, newScale, this.panState, mouseX, mouseY);
@@ -210,6 +240,7 @@ export class ImageViewer {
   };
 
   private handleBackdropClick = (e: MouseEvent): void => {
+    if (!this.settings.closeOnBackdropClick) return;
     e.stopPropagation();
     // Close only when clicking directly on overlay background
     if (e.target === e.currentTarget) {
@@ -222,6 +253,10 @@ export class ImageViewer {
       e.preventDefault();
       e.stopPropagation();
       this.hide();
+      return;
+    }
+
+    if (!this.settings.enableShortcuts) {
       return;
     }
 
@@ -286,13 +321,25 @@ export class ImageViewer {
     }
   };
 
+  private getZoomFactor(): number {
+    switch (this.settings.zoomSensitivity) {
+      case 'slow':
+        return 1.05;
+      case 'fast':
+        return 1.3;
+      case 'normal':
+      default:
+        return 1.15;
+    }
+  }
+
   private handleZoomIn(): void {
-    this.scale = calculateZoomIn(this.scale);
+    this.scale = calculateZoomIn(this.scale, undefined, undefined, this.getZoomFactor());
     this.updateImageTransform();
   }
 
   private handleZoomOut(): void {
-    this.scale = calculateZoomOut(this.scale);
+    this.scale = calculateZoomOut(this.scale, undefined, undefined, this.getZoomFactor());
     this.updateImageTransform();
   }
 
