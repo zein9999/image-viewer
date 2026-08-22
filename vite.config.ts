@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
-import { readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'fs';
 
 export default defineConfig({
   build: {
@@ -20,15 +20,27 @@ export default defineConfig({
   },
   plugins: [
     {
-      name: 'copy-manifest',
+      name: 'copy-manifest-and-assets',
       closeBundle() {
         try {
+          // Copy manifest.json
           mkdirSync('dist', { recursive: true });
           const manifest = readFileSync(resolve(__dirname, 'src/manifest.json'), 'utf-8');
           writeFileSync(resolve(__dirname, 'dist/manifest.json'), manifest);
           console.info('Successfully copied manifest.json to dist/');
+
+          // Copy icons/ directory contents
+          const srcIconsDir = resolve(__dirname, 'src/icons');
+          const distIconsDir = resolve(__dirname, 'dist/icons');
+          mkdirSync(distIconsDir, { recursive: true });
+          const files = readdirSync(srcIconsDir);
+          for (const file of files) {
+            const data = readFileSync(resolve(srcIconsDir, file));
+            writeFileSync(resolve(distIconsDir, file), data);
+          }
+          console.info('Successfully copied icons/ to dist/');
         } catch (err) {
-          console.error('Failed to copy manifest.json:', err);
+          console.error('Failed to copy assets:', err);
         }
       },
     },
