@@ -12,15 +12,21 @@
     "test": "vitest",
     "test:run": "vitest run"
   },
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "devDependencies": {
     "@types/chrome": "^0.0.270",
-    "@types/node": "^20.14.9",
+    "@types/node": "^22.0.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "eslint": "^8.57.0",
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
-    "vite": "^5.4.2",
-    "vitest": "^2.0.5"
+    "vite": "^8.2.2",
+    "vitest": "^4.1.11"
+  },
+  "overrides": {
+    "esbuild": "^0.25.0"
   }
 }
