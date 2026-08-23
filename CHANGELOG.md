@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1](https://github.com/zein9999/image-viewer/compare/v0.4.0...v0.4.1) (2026-08-23)
+
+
+### Bug Fixes
+
+* **ci:** prevent duplicated component prefix in release asset filename ([ae6ba6a](https://github.com/zein9999/image-viewer/commit/ae6ba6add77522950cd7ea6aed59fd38a3369673))
+* **ci:** prevent duplicated component prefix in release asset filename ([c96f7a1](https://github.com/zein9999/image-viewer/commit/c96f7a1eb498681a0f2304f0b581679fb52c399f))
+
 ## [0.4.0](https://github.com/zein9999/image-viewer/compare/image-viewer-v0.3.0...image-viewer-v0.4.0) (2026-08-23)
 
 
