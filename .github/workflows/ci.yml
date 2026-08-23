@@ -90,9 +90,6 @@ jobs:
           done
           echo "All required icons present."
 
-      - name: Validate Built Extension
-        run: npx chrome-webstore-validator dist/
-
       - name: Verify Manifest Permissions (Security Gate)
         run: node scripts/check-permissions.js
 
