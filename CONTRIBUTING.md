@@ -47,22 +47,27 @@ npm run dev
 Before submitting any code, ensure all automated checks pass:
 
 ### Unit Tests (Vitest)
+
 Core math calculations (zoom, pan, coordinates, limits) are tested with **Vitest**:
+
 ```bash
 npm run test:run
 ```
 
 ### Code Formatting (Prettier)
+
 ```bash
 npm run format
 ```
 
 ### Linting (ESLint)
+
 ```bash
 npm run lint
 ```
 
 ### TypeScript Type Checking
+
 ```bash
 npm run typecheck
 ```
@@ -72,6 +77,7 @@ npm run typecheck
 ## Submitting Changes
 
 1. **Create a branch**:
+
    ```bash
    git checkout -b feature/your-feature-name
    # or
@@ -86,6 +92,7 @@ npm run typecheck
    - `docs(scope): update documentation`
 
 3. **Push to your branch**:
+
    ```bash
    git push origin feature/your-feature-name
    ```

@@ -29,7 +29,7 @@ Compatible with **Google Chrome**, **Brave**, **Microsoft Edge**, and other Chro
 
 ## Features
 
-- **Contextual Inspection**: Right-click any image and select *"Open with Image Viewer"*.
+- **Contextual Inspection**: Right-click any image and select _"Open with Image Viewer"_.
 - **Advanced Navigation**: Smooth zooming (mouse wheel or buttons) and fluid click-and-drag panning.
 - **Visual Isolation**: Fully isolated styling (Shadow DOM) so the host website's CSS never conflicts with or breaks the viewer.
 - **Rotation & Reset**: Rotate images 90° clockwise/counter-clockwise and reset zoom/pan with a single keypress.
