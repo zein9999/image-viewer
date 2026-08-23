@@ -42,6 +42,7 @@ export class ImageViewer {
     chrome.storage.local.get(DEFAULT_SETTINGS, (items) => {
       this.settings = items as ViewerSettings;
       this.initializeViewer();
+      chrome.storage.onChanged.addListener(this.handleStorageChange);
     });
   }
 
@@ -216,6 +217,9 @@ export class ImageViewer {
         this.imageElement.removeEventListener('dblclick', this.handleDoubleClick);
       }
 
+      // Clean up storage listener
+      chrome.storage.onChanged.removeListener(this.handleStorageChange);
+
       // Exit fullscreen if active when closing
       if (document.fullscreenElement) {
         document.exitFullscreen().catch(() => {});
@@ -227,6 +231,58 @@ export class ImageViewer {
       this.shadowRoot = null;
       this.imageElement = null;
       this.fullscreenBtn = null;
+    }
+  }
+
+  private handleStorageChange = (
+    changes: { [key: string]: chrome.storage.StorageChange },
+    areaName: string
+  ): void => {
+    if (areaName !== 'local') return;
+
+    const updatedPartial: Partial<ViewerSettings> = {};
+    let hasChanges = false;
+
+    for (const key of Object.keys(DEFAULT_SETTINGS) as (keyof ViewerSettings)[]) {
+      const change = changes[key];
+      if (change && change.newValue !== undefined) {
+        (updatedPartial as Record<keyof ViewerSettings, unknown>)[key] = change.newValue;
+        hasChanges = true;
+      }
+    }
+
+    if (hasChanges) {
+      this.updateSettings({ ...this.settings, ...updatedPartial });
+    }
+  };
+
+  public updateSettings(newSettings: ViewerSettings): void {
+    const oldSettings = this.settings;
+    this.settings = newSettings;
+
+    if (this.shadowRoot) {
+      const overlay = this.shadowRoot.querySelector('.viewer-overlay') as HTMLDivElement | null;
+      if (overlay) {
+        overlay.style.backgroundColor = `rgba(0, 0, 0, ${this.settings.backdropOpacity / 100})`;
+      }
+    }
+
+    if (this.imageElement) {
+      if (this.settings.initialFitMode === 'original') {
+        this.imageElement.style.maxWidth = 'none';
+        this.imageElement.style.maxHeight = 'none';
+      } else {
+        this.imageElement.style.maxWidth = '';
+        this.imageElement.style.maxHeight = '';
+      }
+
+      if (this.settings.enableDoubleClickZoom !== oldSettings.enableDoubleClickZoom) {
+        if (this.settings.enableDoubleClickZoom) {
+          this.imageElement.addEventListener('dblclick', this.handleDoubleClick);
+        } else {
+          this.imageElement.removeEventListener('dblclick', this.handleDoubleClick);
+        }
+      }
     }
   }
 

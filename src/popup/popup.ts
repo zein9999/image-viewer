@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Event Listeners
   opacityInput.addEventListener('input', () => {
     opacityVal.textContent = `${opacityInput.value}%`;
+    saveSettings();
   });
 
   opacityInput.addEventListener('change', saveSettings);
