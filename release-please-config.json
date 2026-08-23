@@ -1,10 +1,12 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "target-branch": "main",
+  "include-component-in-tag": false,
   "packages": {
     ".": {
       "release-type": "node",
-      "extra-files": ["src/manifest.json"]
+      "extra-files": ["src/manifest.json"],
+      "include-component-in-tag": false
     }
   }
 }

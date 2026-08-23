@@ -44,7 +44,7 @@ jobs:
         run: |
           mkdir -p dist-zip
           cd dist
-          zip -r ../dist-zip/image-viewer-${{ steps.release.outputs.tag_name }}.zip .
+          zip -r ../dist-zip/image-viewer-v${{ steps.release.outputs.version }}.zip .
           cd ..
 
       - name: Upload Release Asset
@@ -52,4 +52,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ steps.release.outputs.tag_name }} dist-zip/image-viewer-${{ steps.release.outputs.tag_name }}.zip --clobber
+          gh release upload ${{ steps.release.outputs.tag_name }} dist-zip/image-viewer-v${{ steps.release.outputs.version }}.zip --clobber
