@@ -121,31 +121,10 @@
   transform: scale(0.95);
 }
 
-.viewer-zoom-badge {
-  position: absolute;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(20, 20, 20, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-  font-family: sans-serif;
-  backdrop-filter: blur(8px);
-  z-index: 2147483647;
-  user-select: none;
-  pointer-events: none;
-  text-align: center;
-  transition: opacity 0.2s ease;
-}
-
 /* HUD hidden state rules */
 .viewer-overlay.hud-hidden .viewer-top-controls,
-.viewer-overlay.hud-hidden .viewer-controls,
-.viewer-overlay.hud-hidden .viewer-zoom-badge {
+.viewer-overlay.hud-hidden .viewer-controls {
   opacity: 0;
   pointer-events: none;
 }
+
