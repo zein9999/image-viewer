@@ -17,7 +17,6 @@ export class ImageViewer {
   private shadowRoot: ShadowRoot | null = null;
   private imageElement: HTMLImageElement | null = null;
   private fullscreenBtn: HTMLButtonElement | null = null;
-  private zoomText: HTMLSpanElement | null = null;
   private settings: ViewerSettings = DEFAULT_SETTINGS;
 
   // Interactivity state
@@ -179,17 +178,6 @@ export class ImageViewer {
     controls.appendChild(rotateRightBtn);
     overlay.appendChild(controls);
 
-    // Symmetrical Zoom Badge floating above the controls bar
-    const zoomBadge = document.createElement('div');
-    zoomBadge.className = 'viewer-zoom-badge';
-
-    this.zoomText = document.createElement('span');
-    this.zoomText.textContent = `${Math.round(this.scale * 100)}%`;
-    this.zoomText.style.userSelect = 'none';
-
-    zoomBadge.appendChild(this.zoomText);
-    overlay.appendChild(zoomBadge);
-
     this.shadowRoot.appendChild(overlay);
     document.body.appendChild(this.container);
 
@@ -239,7 +227,6 @@ export class ImageViewer {
       this.shadowRoot = null;
       this.imageElement = null;
       this.fullscreenBtn = null;
-      this.zoomText = null;
     }
   }
 
@@ -251,9 +238,6 @@ export class ImageViewer {
       if (this.imageElement) {
         const { x, y } = this.panState;
         this.imageElement.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${this.scale}) rotate(${this.rotation}deg)`;
-      }
-      if (this.zoomText) {
-        this.zoomText.textContent = `${Math.round(this.scale * 100)}%`;
       }
       this.ticking = false;
     });
