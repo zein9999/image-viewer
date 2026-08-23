@@ -19,3 +19,36 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      - name: Checkout repository
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Install and Build Extension
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          npm ci
+          npm run test:run
+          npm run build
+
+      - name: Package Extension (Zip)
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          mkdir -p dist-zip
+          cd dist
+          zip -r ../dist-zip/image-viewer-${{ steps.release.outputs.tag_name }}.zip .
+          cd ..
+
+      - name: Upload Release Asset
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ steps.release.outputs.tag_name }} dist-zip/image-viewer-${{ steps.release.outputs.tag_name }}.zip --clobber
