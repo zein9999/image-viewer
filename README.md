@@ -24,7 +24,7 @@ A lightweight, local-first, highly secure Chrome and Brave extension to inspect 
 ## How to Use
 
 ![Demo of the extension in action](assets/demo.gif)  
-*Replace this image with your own demo GIF or screenshot*
+_Replace this image with your own demo GIF or screenshot_
 
 1. **Activate**: Right-click on any image and select "Open with Image Viewer" from the context menu.
 2. **Navigate**:
