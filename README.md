@@ -1,15 +1,8 @@
 <div align="center">
-<table width="80%">
-<tr>
-<td>
-
-<div align="center">
 
   <img src="src/icons/icon-128.png" alt="Image Viewer Logo" width="96" />
 
   <h1>Image Viewer</h1>
-
-  <p>A lightweight, local-first Chrome & Brave extension to inspect images comfortably in an isolated overlay without page distractions.</p>
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Add_to_Chrome-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
@@ -23,6 +16,10 @@
 [Installation](#installation) · [Features](#features) · [How to Use](#how-to-use) · [Contributing](CONTRIBUTING.md) · [License](#license)
 
 </div>
+
+<p align="center">
+  <em>A lightweight, local-first Chrome & Brave extension to inspect images comfortably in an isolated overlay without page distractions.</em>
+</p>
 
 ## Installation
 
@@ -61,8 +58,3 @@ Interested in developing, building from source, or running tests? Check out the 
 ## License
 
 Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
-
-</td>
-</tr>
-</table>
-</div>
